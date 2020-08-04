@@ -16,13 +16,13 @@ print(b[2])
 print(len(b))
 print(b.upper())
 print(b[-1])
-list=[10,20,"edu","test"]
-print(list)
-print(list[2:10])
-list[2]=1
-list.insert(1,"t1")
-print(list)
-list.reverse()
+l=[10,20,"edu","test"]
+print(l)
+print(l[2:10])
+l[2]=1
+l.insert(1,"t1")
+print(l)
+l.reverse()
 print(list)
 
 ani={'1':'v1' , 2:455 , "asdf":133} #dictionary
@@ -342,6 +342,260 @@ def func(fun):
         print("welcome to edu")
     return wrapper;
 
+@func
+def func2(name):
+    print(f"{name}")
+
+func2("pandora")
+#decorator are reference to function
+
+class Square:
+    def __init__(self,side):
+        self._side=side
+    @property
+    def side(self):
+        return self._side
+    @side.setter
+    def side(self,value):
+        if value>=0 :
+            self._side=value;
+        else:
+            print("error")
+    @property
+    def area(self):
+        return  self._side**2;
+    @classmethod
+    def unit_square(cls):
+        return  cls(1)
+s=Square(5)
+print(s.side)
+print(s.area)
+
+import  functools
+def singleton(cls): #define singleton class
+    @functools.wraps(cls)
+    def wrapper(*args,**kwargs):
+        if not wrapper.instance:
+            wrapper.instance=cls(*args,*kwargs)
+        return wrapper.instance
+    wrapper.instance=None
+    return wrapper;
+@singleton
+class one:
+    pass
+first=one()
+second=one()
+print(first is second)
+
+def repeat(num):
+    def decor_repeat(func):
+        @functools.wraps(func)
+        def wrapper(*args,**kwargs):
+            for _ in range(num):
+                value=func(*args,**kwargs)
+            return value
+        return  wrapper;
+    return  decor_repeat
+
+@repeat(num=4)
+def function(name):
+    print(f"{name}")
+
+function("suyash")  #nested decorator
+
+x=lambda a:a*a
+print(x(10))
+
+def a(x):
+    return lambda y:x+y
+print(a(10))
+print(a(10)(4))
+
+a=[1,2,3,4,5,6]
+nlist=filter(lambda  a: a%3==0,a)
+print(nlist)
+print(list(nlist))
+
+p=list(map(lambda a:(a/3!=2),a))
+print(p)
+#reduce return a single value
+from functools import  reduce
+
+c=reduce(lambda a,b: a+b,[1,2,3,4])
+print(c)
+
+s=lambda  a:a*a
+print(s(4))
+d=lambda x,y:3*x+4*y
+print(d(2,3))
+x=lambda a,b:(a+b)**2
+print(x(3,4))
+
+def dbl(a,b):
+    return a*b
+
+x=map(dbl,[1,2,3,4],[2,3,4,5])
+print(x)
+print(list(x))
+
+ls=[1,2,3,4,5]
+y=list(map(lambda a:a+3,ls))
+print(y)
+
+def grt(x):
+    if x>3:
+        return x
+print(tuple(filter(grt,ls)))
+
+def xy(x,y):
+    return x+y
+print(reduce(xy,ls))
+
+print(reduce(lambda p,q:p*q,ls))
+
+c=map(lambda x:x+x,filter(lambda x:x>2,[1,2,3,4]))
+print(list(c))
+d=filter(lambda  x:x>2,map(lambda x:x+x,[1,2,3,4,5,6]))
+print(list(d))
+r=reduce(lambda x,y:x+y,map(lambda x:x+x,filter( lambda  x: x>3,[1,3,4,5,6,7,8])))
+print(r)
 
 
+def ne(dict):
+    for x,y in dict.items():
+        yield x,y
+a={1:'hi',2:'welcome'}
+b=ne(a)
+print(b)
+print(next(b))
 
+def myfunc(i):
+    while i<3:
+        yield i
+        i+=1
+
+j=myfunc(1)
+print(next(j))
+print(next(j))
+#print(next(j)) ll give error
+
+def ex():
+    n=3
+    yield n
+    n*=n
+    yield n
+
+j=ex()
+print(next(j))
+print(next(j))
+#print(next(j)) #give error
+j=ex()
+for x in j:
+    print(x)
+
+
+f=range(6)
+print(f)
+print("list com",end=":")
+q=[x+2 for x in f]
+print(q)
+print("gen exp",end=":")
+r=(x+2 for x in f)
+print(r)
+print(min(r))
+for x in r:
+    print(x)
+#print(min(r)) error casue empty sequence now
+
+def fib():
+    f,s=0,1
+    while True:
+        yield f
+        f,s=s,f+s
+
+for r in fib():
+    if r> 50:
+        break
+    print(r,end=" ")
+
+a=range(100)
+b=(x for x in a)
+print(b)
+for y in b:
+    print(y)
+
+a=range(2,50,2)
+b=(x for x in a)
+print(b)
+for y in b:
+    print(y)
+
+class Car():
+
+    def __init__(self,model,year,price):
+        self.model=model
+        self.year=year
+        self.price=price
+    def price_inc(self):
+        self.price=self.price*1.13
+
+honda=Car("10",2018,1000)
+tata=Car('bolt6',2018,20000)
+
+honda.modelName='City'
+honda.year=2017
+honda.price=1000
+
+tata.mode='Bolt'
+tata.y=2020
+tata.price=2000
+
+print(honda.__dict__)
+print(tata.y)
+print(honda.price_inc())
+print(honda.price)
+
+class SuperCar(Car):
+    def __int__(self,model,year,price,cc):
+        super.__init__(model,year,price)
+        self.cc=cc
+
+honda=SuperCar('city',2019,2000)
+honda.cc=1500
+
+
+print(help(honda))
+
+
+class parent:
+    def __init__(self,fname,fage):
+        self.fname=fname
+        self.fage=fage
+    def view(self):
+        print(self.fname,self.fage)
+
+class child(parent):
+    def __init__(self,fname,fage):
+        parent.__init__(self,fname,fage)
+        self.lname='edu'
+
+    def view(self):
+        print(self.fname,self.lname,self.fage)
+
+c=child('ph',24)
+c.view()
+
+
+class parent:
+    def func1(self):
+        print("this is func 1")
+class parent2:  # parent2(parent):can't have this when we do child(parent,parent2):
+    def func2(self):      #Cannot create a consistent method resolution
+        print('this is func 2')
+class child(parent,parent2):
+    def func1(self):
+        super().func1()
+        print('this is func child')
+ob=child()
+ob.func1()
+ob.func2()
